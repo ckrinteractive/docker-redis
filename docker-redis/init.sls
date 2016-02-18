@@ -1,6 +1,6 @@
 {% set container_name = 'redis' %}
 {% set host_port = salt['pillar.get']('redis:port', '6379') %}
-{% set host_ip = salt['grains.get']('ip4_interfaces:eth0:0') %}
+{% set host_ip = salt['grains.get']('redis:host') %}
 
 
 redis:
