@@ -4,8 +4,7 @@
 
 
 {{ image_name }}:
-  dockerng.pulled:
-    - name: redis
+  dockerng.image_present
 
 {{ container_name }}:
   require:
