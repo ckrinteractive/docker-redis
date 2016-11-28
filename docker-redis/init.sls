@@ -1,28 +1,17 @@
 {% set container_name = 'redis' %}
-{% set host_port = salt['pillar.get']('redis:port', '6379') %}
-{% set host_ip = salt['grains.get']('redis:host') %}
+{% set image_name = 'redis:'+salt['pillar.get']('redis:tag_name', 'latest') %}
 
 
-redis:
-  docker.pulled:
+{{ image_name }}:
+  dockerng.pulled:
     - name: redis
 
-redis-container:
+{{ container_name }}:
   require:
-     - docker: redis
-  docker.installed:
+     - dockerng: {{ image_name }}
+  dockerng.running:
     - name: {{ container_name }}
-    - image: redis
-
-redis-running:
-  require:
-    - docker: redis-container
-  docker.running:
-    - container: {{ container_name }}
-    - image: redis
+    - image: {{ image_name }}
     - restart_policy: always
-    - network_mode: bridge
-    - ports:
-        "6379/tcp":
-            HostIp: {{ host_ip }}
-            HostPort: {{ host_port }}
+    - port_bindings:
+      - {{ salt['grains.get']('ip4_interfaces:eth0:0') }}:{{ host_port }}:6379/tcp
