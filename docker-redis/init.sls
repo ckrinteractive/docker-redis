@@ -1,5 +1,6 @@
 {% set container_name = 'redis' %}
 {% set image_name = 'redis:'+salt['pillar.get']('redis:tag_name', 'latest') %}
+{% set host_port = salt['pillar.get']('redis:port', '6379') %}
 
 
 {{ image_name }}:
